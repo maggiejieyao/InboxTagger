@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Classifier</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+        margin-top: 100px;
+      }
+
+      .container {
+        background-color: white;
+        padding: 50px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 40%;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .btn {
+        background-color: #4caf50;
+        color: white;
+        padding: 15px 25px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background-color: #45a049;
+      }
+
+      .message {
+        margin-top: 20px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>InboxTagger</h1>
+      <p>Click the button below to run the prediction on your Gmail inbox.</p>
+      <button class="btn" id="predictBtn">Run Prediction</button>
+
+      <div id="message" class="message"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("predictBtn")
+        .addEventListener("click", function () {
+          document.getElementById("message").innerText =
+            "Running prediction...";
+
+          // Make an AJAX call to the backend to trigger the prediction
+          fetch("/predict")
+            .then((response) => response.json())
+            .then((data) => {
+              if (
+                data.status === "Emails processed and labeled successfully!"
+              ) {
+                document.getElementById("message").innerText =
+                  "Prediction completed successfully!";
+              } else {
+                document.getElementById("message").innerText =
+                  "Something went wrong. Please try again.";
+              }
+            })
+            .catch((error) => {
+              document.getElementById("message").innerText =
+                "Error: " + error.message;
+            });
+        });
+    </script>
+  </body>
+</html>
